@@ -47,7 +47,7 @@
     }
     // laço de repetição para inclusão dos dados na tabela
     foreach($stmt as $client){
-        $table .= '<form action="edit.php" method="POST"><tr>';
+        $table .= '<form action="" method="POST"><tr>';
             $table .= "<td style='height:10px;'><center><input type='checkbox' style='margin-top: 4px;' value='".$client['id']."'></center></td>";
             $table .= '<td></td>';
             $table .= "<td >".$client['email']." </td>";
@@ -62,9 +62,9 @@
             $table .= '<td></td>';
             $table .= "<td >".$client['dropoffTime']." </td>";
             $table .= '<td></td>';
-            $table .= "<td ><input type='hidden' name='id' value='$client[id]'></input><input type='submit' value='editar'></input></td>";
+            $table .= "<td ><input type='hidden' name='id' class='btnEditar' value='$client[id]'><input type='submit' value='Editar'></input></input></td>";
             $table .= '<td></td>';
-            $table .= "<td ><a class='bnt btn-info' onclick='deletar()' ".$client['id']."'>Excluir</a></td>";
+            $table .= "<td ><input type='hidden' name='id' value='$client[id]'><input type='submit' value='Excluir'></input></input></td>";
         $table .= '</tr></form>';
     }
 
@@ -106,22 +106,24 @@
         //exit();
     }
 ?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Evento de clique no botão de edição
+    // Evento de clique no botão "Editar"
     $('.btnEditar').click(function() {
-        var idElemento = $(this).data('id'); // Obtém o ID do elemento
-        // Realiza uma solicitação AJAX para carregar a tela de edição
+        var idElemento = $(this).data('<?php $client['id']?>'); // Obtém o ID do elemento a ser editado
+        
+        // Realiza uma solicitação AJAX para carregar o conteúdo de edit.php
         $.ajax({
-            url: 'tela_edicao.php?id=' + idElemento, // URL da página de edição com o ID do elemento
-            success: function(data) {
-                // Exibe a resposta (a tela de edição) em um modal, por exemplo
-                // Aqui você pode usar uma biblioteca como Bootstrap Modal ou outra solução de modal
-                $('#modalEditar').html(data); // Exemplo: exibindo o conteúdo em um modal com ID "modalEditar"
+            url: 'edit.php?id=' + idElemento, // URL da página edit.php com o ID do elemento
+            type: 'GET', // Método da solicitação
+            success: function(response) {
+                // Exibe o conteúdo da página edit.php em uma janela modal ou div na página admin.php
+                $('#conteudoEdit').html(response); // Supondo que você tenha um elemento com ID 'conteudoEdit' onde o conteúdo será exibido
             },
             error: function() {
-                // Lidar com erros de carregamento da tela de edição
-                alert('Ocorreu um erro ao carregar a tela de edição.');
+                // Lidar com erros de carregamento da página edit.php
+                alert('Ocorreu um erro ao carregar a página de edição.');
             }
         });
     });
@@ -217,6 +219,7 @@ $(document).ready(function() {
             <div class="container">
                 <div class="abc">
                     <h1 style="font-size: 30px;">Reservas</h1>
+                    <div id="conteudoEdit"></div>
                     <?php echo $table; ?>
                 </div>
             </div>
