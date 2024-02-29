@@ -43,7 +43,7 @@
 
     function deletar(){
         $id = $_POST['idcarro'];
-        $deleta = mysqli_query($conn,"DELETE * FROM reserva WHERE id = $id");
+        //$deleta = mysqli_query($conn,"DELETE * FROM reserva WHERE id = $id");
     }
     // laço de repetição para inclusão dos dados na tabela
     foreach($stmt as $client){
@@ -62,7 +62,7 @@
             $table .= '<td></td>';
             $table .= "<td >".$client['dropoffTime']." </td>";
             $table .= '<td></td>';
-            $table .= "<td ><input type='hidden' name='id' class='btnEditar' value='$client[id]'><input type='submit' value='Editar'></input></input></td>";
+            $table .= "<td ><button class='btnEditar' data-id='" . $client['id'] . "'>Editar</button></td>";
             $table .= '<td></td>';
             $table .= "<td ><input type='hidden' name='id' value='$client[id]'><input type='submit' value='Excluir'></input></input></td>";
         $table .= '</tr></form>';
@@ -111,7 +111,7 @@
 $(document).ready(function() {
     // Evento de clique no botão "Editar"
     $('.btnEditar').click(function() {
-        var idElemento = $(this).data('<?php $client['id']?>'); // Obtém o ID do elemento a ser editado
+        var idElemento = $(this).data('id'); // Obtém o ID do elemento a ser editado
         
         // Realiza uma solicitação AJAX para carregar o conteúdo de edit.php
         $.ajax({
@@ -214,13 +214,15 @@ $(document).ready(function() {
             </div>
         </div>
     </header>
+
     <section class="hero is-fullheight">
         <div class="hero-body">
+        <div id="conteudoEdit"></div>
             <div class="container">
                 <div class="abc">
                     <h1 style="font-size: 30px;">Reservas</h1>
-                    <div id="conteudoEdit"></div>
                     <?php echo $table; ?>
+                    
                 </div>
             </div>
         </div>
